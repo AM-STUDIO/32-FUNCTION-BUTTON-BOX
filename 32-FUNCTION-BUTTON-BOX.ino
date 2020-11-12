@@ -20,8 +20,14 @@ byte buttons[NUMROWS][NUMCOLS] = {
   {5, 6, 7, 8, 9},
   {10,11,12,13,14},
   {15,16,17,18,19},
-  {20,21,22,23,15},
+  {20,21,22,23,/*see note*/15},
 };
+/* note: the joystick cannot have more than 32 buttons total.
+ * - the button matrix can detect 25 buttons
+ * - the 4 rotaries are taking button IDs 24-31
+ * this means the last button above will be sent as
+ * a copy of _some_ button ID, and I chose 15.
+ */
 
 struct rotariesdef {
   byte pin1;
