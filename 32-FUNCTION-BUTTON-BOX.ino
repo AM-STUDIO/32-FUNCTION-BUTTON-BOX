@@ -2,7 +2,7 @@
 //USE w ProMicro
 //Tested in WIN10 + Assetto Corsa
 //AMSTUDIO
-//20.8.17
+//20.11.12
 
 #include <Keypad.h>
 #include <Joystick.h>
@@ -13,14 +13,14 @@
 #define NUMROWS 5
 #define NUMCOLS 5
 
-#define ASYNC_UPDATE_MILLIS 25
+#define ASYNC_UPDATE_MILLIS 20
 
 byte buttons[NUMROWS][NUMCOLS] = {
   {0, 1, 2, 3, 4},
   {5, 6, 7, 8, 9},
   {10,11,12,13,14},
   {15,16,17,18,19},
-  {20,21,22,23},
+  {20,21,22,23,15},
 };
 
 struct rotariesdef {
@@ -59,10 +59,12 @@ enum {
 
   Rh_START_HI,
   Rh_CW_BEGIN_HI,
-  Rh_CCW_BEGIN_HI
+  Rh_CCW_BEGIN_HI,
+
+  Rh_MAX
 };
 
-const unsigned char ttable_half[6][4] = {
+const unsigned char ttable_half[Rh_MAX][4] = {
   // pin bits - transistions from 00 to 00 or 11
   //  00                   01              10             11
   // Rh_START_LO (00) - usually either both on or both off
@@ -90,10 +92,12 @@ enum {
   R_CW_NEXT,
   R_CCW_BEGIN,
   R_CCW_FINAL,
-  R_CCW_NEXT
+  R_CCW_NEXT,
+
+  R_MAX
 };
 
-const unsigned char ttable[7][4] = {
+const unsigned char ttable[R_MAX][4] = {
   // pin bits - transistions
   //  00       01           10           11
   // R_START
@@ -142,13 +146,12 @@ void loop() {
   int           changes = 0;
   unsigned long now;
 
-  now = millis();
-
   CheckAllEncoders();
 
-#ifdef ASYNC_UPDATE_MILLIS
+  now = millis();
 
-  if ( (signed)(now - LastSendTime) > ASYNC_UPDATE_MILLIS ) {
+#ifdef ASYNC_UPDATE_MILLIS
+  if ( (signed long)(now - LastSendTime) > ASYNC_UPDATE_MILLIS ) {
     /* do the clicks */
     for (int i=0;i<NUMROTARIES;i++) {
       if ( rotaries[i].cw_count > 0 ) {        /* clockwise clicks */
@@ -188,7 +191,6 @@ int CheckAllButtons(void) {
   int changes = 0;
   if (buttbx.getKeys())
     {
-       changes++;
        for (int i=0; i<LIST_MAX; i++)   
         {
            if ( buttbx.key[i].stateChanged )   
@@ -197,6 +199,7 @@ int CheckAllButtons(void) {
                     case PRESSED:
                     case HOLD:
                               Joystick.setButton(buttbx.key[i].kchar, 1);
+                              changes++;
                               break;
                     case RELEASED:
                     case IDLE:
@@ -244,7 +247,7 @@ int CheckAllEncoders(void) {
       changes++;
       #ifdef ASYNC_UPDATE_MILLIS
         rotaries[i].ccw_count += 2;
-        rotaries[i].state &= 0xf;
+        rotaries[i].state &= 0xf; /* clear the CW/CCW state as we've added to click count */
         /* and cancel the opposite rotation, note we get rid
          * of everything except the LSB so it may "wind down" to 0
          */
@@ -257,7 +260,7 @@ int CheckAllEncoders(void) {
       changes++;
       #ifdef ASYNC_UPDATE_MILLIS
         rotaries[i].cw_count += 2;
-        rotaries[i].state &= 0xf;
+        rotaries[i].state &= 0xf; /* clear the CW/CCW state as we've added to click count */
         /* and cancel the opposite rotation, note we get rid
          * of everything except the LSB so it may "wind down" to 0
          */
