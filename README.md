@@ -6,6 +6,13 @@ This version has been updated to
 - asynchronous joystick updates drops fewer clicks on the rotaries.
 - rotary twists are "counted" and the async update keeps them ticking.
 
+in this implementation I made a controller to use with FS2020.
+Keep in mind it just looks like a joystick to the PC, so you have
+to map the buttons in FS2020 settings.
+ 
+![fs2020_controller](images/FS2020_Box.jpg)
+
+
 their notes below:
 -----------------------------------
 
