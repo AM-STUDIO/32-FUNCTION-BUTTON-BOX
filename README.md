@@ -11,7 +11,8 @@ Keep in mind it just looks like a joystick to the PC, so you have
 to map the buttons in FS2020 settings.
  
 ![fs2020_controller](images/FS2020_Box.jpg)
-
+![wiring0](images/Wiring0.png)
+![wiring1](images/Wiring1.png)
 
 their notes below:
 -----------------------------------
