@@ -3,9 +3,6 @@
 View YouTube Video here for setup instructions
 https://youtu.be/Z7Sc4MJ8RPM
 
-Please consider supporting 
-https://www.patreon.com/AMSTUDIO
-
 Share the video. 
 
 NON-COMMERCIAL PERSONAL USE ONLY COPYRIGHT AMSTUDIO 2018
